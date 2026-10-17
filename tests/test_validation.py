@@ -31,7 +31,7 @@ def test_amount_must_be_positive(amount):
         parse_expense_form(valid_form(amount=amount))
 
 
-@pytest.mark.parametrize("amount", ["abc", "", "1000000000"])
+@pytest.mark.parametrize("amount", ["abc", "", "1000000000", "NaN", "Infinity", "1.239"])
 def test_invalid_or_too_large_amount_is_rejected(amount):
     with pytest.raises(ValueError):
         parse_expense_form(valid_form(amount=amount))
@@ -46,3 +46,4 @@ def test_invalid_or_too_large_amount_is_rejected(amount):
 def test_invalid_fields_are_rejected(field, value):
     with pytest.raises(ValueError):
         parse_expense_form(valid_form(**{field: value}))
+
