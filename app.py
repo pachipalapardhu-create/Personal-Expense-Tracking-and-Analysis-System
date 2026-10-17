@@ -89,11 +89,16 @@ def parse_expense_form(form):
     try:
         expense_date = date.fromisoformat(form.get("expense_date", "").strip())
         category_id = int(form.get("category_id", ""))
-        amount = Decimal(form.get("amount", "").strip()).quantize(Decimal("0.01"))
+        entered_amount = Decimal(form.get("amount", "").strip())
+        amount = entered_amount.quantize(Decimal("0.01"))
     except (ValueError, TypeError, InvalidOperation):
         raise ValueError("Enter a valid date, category, and amount.") from None
     description = form.get("description", "").strip()
     payment_method = form.get("payment_method", "").strip()
+    if not amount.is_finite():
+        raise ValueError("Enter a finite amount with no more than two decimal places.")
+    if amount != entered_amount:
+        raise ValueError("Amount can have no more than two decimal places.")
     if amount <= 0 or amount > Decimal("999999999.99"):
         raise ValueError("Amount must be greater than zero and no more than 999,999,999.99.")
     if not description or len(description) > 240:
@@ -268,3 +273,4 @@ def request_too_large(_error):
 
 if __name__ == "__main__":
     app.run(debug=os.getenv("FLASK_DEBUG", "0") == "1")
+
