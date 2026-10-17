@@ -1,0 +1,1 @@
+{% extends 'base.html' %}{% block title %}Something went wrong · Spendwise{% endblock %}{% block content %}<div class="error-card panel"><div class="error-mark">!</div><div class="eyebrow">A QUICK CHECK</div><h1>We couldn't load this page.</h1><p>{{ message }}</p><a class="button primary" href="{{ url_for('dashboard') }}">Back to overview</a></div>{% endblock %}
